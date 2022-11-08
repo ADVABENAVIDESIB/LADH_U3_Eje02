@@ -9,7 +9,7 @@ import { ToastController } from '@ionic/angular';
 import { PRIMARY_OUTLET } from '@angular/router';
 
 //import { FormControl, FormGroup, Validators } from '@angular/forms';
-
+//aqui haremos lo de agregar
 @Component({
   selector: 'app-agregar-producto',
   templateUrl: './agregar-producto.page.html',
