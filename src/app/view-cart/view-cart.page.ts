@@ -23,27 +23,39 @@ export class ViewCartPage implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {
     this.total = 0;
+    this.productList=[{
+      id: "",
+      img: "",
+      name: "ss",
+      price: 0,
+      amount: 0,
+    }]
   }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe((params) => {
+   this.activatedRoute.queryParams.subscribe((params) => {
       this.productList = this.productsService.llenaCarro();
     });
     for (let i = 0; i < this.productList.length; i++) {
       this.total+=(this.productList[i].price*this.productList[i].amount);
-    }
+    } 
+/*     this.productsService.getProductosFromCart().subscribe(
+      res => {
+        this.productList = res;
+        console.log(this.productList);
+        console.log("hola carrito");
+      }
+    ) */
+
   }
-  public removeProductFromCart(id: number){
-
-
-    
+  public removeProductoFromCart(id: number){    
     this.total=0;
     this.productsService.removeProductFromCart(id);
     for (let index = 0; index < this.productList.length; index++) {
       let price = this.productList[index].price;
       let amount = this.productList[index].amount;
       this.total += price * amount;
-      console.log(this.total);
+      console.log(id);
     }
   }
 

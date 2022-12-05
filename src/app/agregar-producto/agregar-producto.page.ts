@@ -24,7 +24,6 @@ export class AgregarProductoPage implements OnInit {
     private productsService: ProductsService,private alertController: AlertController, private toastController: ToastController
   ) {
     this.producto = {
-      id: "",
       img:"",
       name: "",
       price: 0,
@@ -72,7 +71,6 @@ export class AgregarProductoPage implements OnInit {
       this.productsService.newProducto(this.producto);
      // this.productsService.addProduct(this.producto);
       this.producto = {
-        id: "",
         img:"",
         name:"",
         price: 0,

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class HomePage {
   public productos: Producto[];
+
   public procuctosEnCarrito: Producto[]=[];
   constructor(private productservice: ProductsService, private ruta: Router) {
    

@@ -8,6 +8,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Injectable } from '@angular/core';
 import { Producto } from '../model/producto';
+ 
 import { map } from 'rxjs/operators'
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
@@ -20,7 +21,7 @@ export class ProductsService {
   private productosEnCarro: Producto[];
   constructor(private firestore:AngularFirestore) {
     this.productosEnCarro = [];
-    this.productos=[
+   /*  this.productos=[
       {
         id:"1",
         img:"https://picsum.photos/id/684/600/400",
@@ -42,7 +43,13 @@ export class ProductsService {
         price:15,
         amount:0,
       }
-    ]
+    ] */
+    this.getProductos().subscribe(
+      res => {
+        this.productos = res;
+        console.log(this.productos);
+      }
+    )
    }
    public getProducts(): Producto[]{
     return this.productos;
@@ -68,6 +75,12 @@ export class ProductsService {
       return this.productosEnCarro;
     }
     public addProductById(i: number) {
+      this.getProductos().subscribe(
+        res => {
+          this.productos = res;
+          console.log(this.productos);
+        }
+      )
       let index=-1;
       index=this.already(this.productos[i].id)
       if(index===-1){
@@ -99,7 +112,7 @@ export class ProductsService {
         })
       )
     }
-    public getStudentById(id: string) {
+    public getProductoById(id: string) {
       let result= this.firestore.collection("productos").doc(id).valueChanges();
       return result;
     }
@@ -108,5 +121,31 @@ export class ProductsService {
     }
     public removeProducto(id: string){
       this.firestore.collection("productos").doc(id).delete();
+    }
+
+    //carrito
+
+    public addProductoToCart(producto: Producto) {
+      this.firestore.collection('productosEnCarrito').add(producto);
+    }
+    public getProductosFromCart(): Observable<Producto[]> {
+      
+      return this.firestore.collection('productosEnCarrito').snapshotChanges().pipe(
+        map(actions=> {
+          return actions.map(a=>{
+            console.log(a);
+            const data = a.payload.doc.data() as Producto;
+            console.log(data);
+            const id = a.payload.doc.id;
+            return { id,...data};
+          })
+        })
+      )
+
+
+    }
+
+    public removeProductoFromCart(nombre: string){
+      this.firestore.collection("productosEnCarrito").doc(nombre).delete();
     }
 }
