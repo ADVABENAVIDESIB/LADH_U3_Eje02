@@ -34,6 +34,9 @@ export class ViewCartPage implements OnInit {
     }
   }
   public removeProductFromCart(id: number){
+
+
+    
     this.total=0;
     this.productsService.removeProductFromCart(id);
     for (let index = 0; index < this.productList.length; index++) {

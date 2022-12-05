@@ -8,6 +8,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { Injectable } from '@angular/core';
 import { Producto } from '../model/producto';
+import { map } from 'rxjs/operators'
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +18,7 @@ export class ProductsService {
 
   private productos: Producto[];
   private productosEnCarro: Producto[];
-  constructor() {
+  constructor(private firestore:AngularFirestore) {
     this.productosEnCarro = [];
     this.productos=[
       {
@@ -53,8 +56,6 @@ export class ProductsService {
       item.amount = item.amount + 1;
       return item;
     }
-
-
     public addProduct(newProduct: Producto){
       this.productos.push(newProduct);
     }
@@ -83,5 +84,29 @@ export class ProductsService {
           return i
       }
       return -1
+    }
+    //firebase
+    public getProductos(): Observable<Producto[]> {
+      return this.firestore.collection('productos').snapshotChanges().pipe(
+        map(actions=> {
+          return actions.map(a=>{
+            console.log(a);
+            const data = a.payload.doc.data() as Producto;
+            console.log(data);
+            const id = a.payload.doc.id;
+            return { id,...data};
+          })
+        })
+      )
+    }
+    public getStudentById(id: string) {
+      let result= this.firestore.collection("productos").doc(id).valueChanges();
+      return result;
+    }
+    public newProducto(producto: Producto) {
+      this.firestore.collection('productos').add(producto);
+    }
+    public removeProducto(id: string){
+      this.firestore.collection("productos").doc(id).delete();
     }
 }

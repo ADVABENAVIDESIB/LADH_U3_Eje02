@@ -67,8 +67,10 @@ export class AgregarProductoPage implements OnInit {
   }
 
   public addProduct() {
-    if(this.producto.name!==''&&this.producto.img!==''&&this.producto.price!=0&&this.producto.id!==''){
-      this.productsService.addProduct(this.producto);
+    if(this.producto.name!==''&&this.producto.img!==''&&this.producto.price!=0){
+     
+      this.productsService.newProducto(this.producto);
+     // this.productsService.addProduct(this.producto);
       this.producto = {
         id: "",
         img:"",
@@ -82,9 +84,5 @@ export class AgregarProductoPage implements OnInit {
     }else{
       this.presentAlertError()
     }
-
-
   }
-
-
 }

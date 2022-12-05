@@ -11,7 +11,14 @@ export class HomePage {
   public productos: Producto[];
   public procuctosEnCarrito: Producto[]=[];
   constructor(private productservice: ProductsService, private ruta: Router) {
-    this.productos=this.productservice.getProducts();
+   
+   // this.productos=this.productservice.getProducts();
+   this.productservice.getProductos().subscribe(
+    res => {
+      this.productos = res;
+      console.log(this.productos);
+    }
+  )
   }
 
 
